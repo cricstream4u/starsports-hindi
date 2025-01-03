@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG-@cric_stream</title>
+    <link rel="shortcut icon" type="image/x-icon" href="Cric stream Favicon.jpg">
+    <!-- Shaka Player UI compiled library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.5/shaka-player.ui.min.js"></script>
+    <!-- Shaka Player UI compiled library default CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.5/controls.min.css">
+    <style>
+      #live-label {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 10px;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 4px 8px;
+        border-radius: 5px;
+        display: none;
+        z-index: 10;
+      }
+
+      #live-label a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+       /* For screens larger than 768px (laptops, desktops) */
+      @media (min-width: 768px) {
+        #live-label {
+          font-size: 8px;
+          padding: 5px 10px;
+        }
+      }
+
+      /* For smaller screens (mobiles) */
+      @media (max-width: 767px) {
+        #live-label {
+          font-size: 5px;
+          padding: 2px 4px;
+          top: 5px;
+          right: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div data-shaka-player-container style="max-width:100%">
+      <video autoplay data-shaka-player id="video" style="width:100%;height:100%" poster="CRIC stream Thumbnail .jpg"></video>
+      <div id="live-label">
+        <center><a href="https://t.me/cric_stream">CRIC <br> STREAM</a></center>
+      </div>
+    </div>
+
+    <script>
+      // Function to fetch URL parameters
+      function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+          manifestUri: params.get('manifestUri')
+        };
+      }
+
+      async function init() {
+        const { manifestUri } = getUrlParams();
+
+        if (!manifestUri) {
+          console.error('No manifestUri provided!');
+          alert("Error: No video URL provided in the query string.");
+          return;
+        }
+
+        const video = document.getElementById('video');
+        const ui = video['ui'];
+        const controls = ui.getControls();
+        const player = controls.getPlayer();
+
+        const config = {
+          'controlPanelElements': ['play_pause', 'spacer', 'mute', 'quality', 'language','picture_in_picture', 'fullscreen']
+        };
+
+        ui.configure(config);
+
+        window.player = player;
+        window.ui = ui;
+
+        player.addEventListener('error', onPlayerErrorEvent);
+        controls.addEventListener('error', onUIErrorEvent);
+
+        const liveLabel = document.getElementById('live-label');
+        liveLabel.style.display = 'block';
+
+        try {
+          await player.load(manifestUri);
+          console.log('The video has now been loaded!');
+        } catch (error) {
+          onPlayerError(error);
+        }
+      }
+
+      function onPlayerErrorEvent(errorEvent) {
+        onPlayerError(errorEvent.detail);
+      }
+
+      function onPlayerError(error) {
+        console.error('Error code', error.code, 'object', error);
+      }
+
+      function onUIErrorEvent(errorEvent) {
+        onPlayerError(errorEvent.detail);
+      }
+
+      function initFailed(errorEvent) {
+        console.error('Unable to load the UI library!');
+      }
+
+      document.addEventListener('shaka-ui-loaded', init);
+      document.addEventListener('shaka-ui-load-failed', initFailed);
+    </script>
+
+    <div style="margin-top: 5px;">
+      <center>
+            <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
+            <script type="text/javascript">sc_online_t(1703448, "Watching....", "#1d1d21");</script>
+            <br>
+            <noscript><a href="https://www.supercounters.com/"></a></noscript>
+        </center>
+    </div>
+    <div style="background-color: #0074d9; text-align: center; padding: 10px;">
+      <a href="https://telegram.me/cric_stream" target="_blank">
+        <button id="joinTelegramButton">Join Telegram</button>
+      </a>
+    </div>
+  </body>
+</html>
