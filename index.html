@@ -51,9 +51,6 @@
         player.addEventListener('error', onPlayerErrorEvent);
         controls.addEventListener('error', onUIErrorEvent);
 
-        const liveLabel = document.getElementById('live-label');
-        liveLabel.style.display = 'block';
-
         try {
           await player.load(manifestUri);
           console.log('The video has now been loaded!');
