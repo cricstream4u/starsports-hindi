@@ -2,37 +2,48 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG-@cric_stream</title>
+    <title>TG @cric_stream</title>
     <link rel="shortcut icon" type="image/x-icon" href="Cric stream Favicon.jpg">
-    <!--mpd link no water-mark Shaka Player UI compiled library -->
+    <!-- Shaka Player UI compiled library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.5/shaka-player.ui.min.js"></script>
-    <!-- Shaka Player UI compiled library default CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.5/controls.min.css">
-   
+    <style>
+      #live-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 10px;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 4px 8px;
+        border-radius: 10px;
+        display: none;
+        z-index: 10;
+      }
+
+      #live-label a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
     <div data-shaka-player-container style="max-width:100%">
-      <video autoplay data-shaka-player id="video" style="width:100%;height:100%; background-color:black;" poster="CRIC stream Thumbnail .jpg"></video>
-      
+      <video autoplay data-shaka-player id="video" style="width:100%;height:100%; background-color:black;" poster=""></video>
+      <div id="live-label">
+        <center><a href="https://t.me/cric_stream">CRIC <br> STREAM</a></center>
+      </div>
     </div>
 
     <script>
-      // Function to fetch URL parameters
-      function getUrlParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-          manifestUri: params.get('manifestUri')
-        };
-      }
-
       async function init() {
-        const { manifestUri } = getUrlParams();
+        const defaultUrl = "https://live07.hotstar.com/hls/live/2034625/inallow-ftb-2025/hin/1540037352/15mindvrm016ea7e7c38c274a0faaa010e85bf2a6eb18january2025/master_ap.m3u8?a=ns&hdnea=exp=1737191500~acl=%2fhls%2flive%2f2034625%2finallow-ftb-2025%2fhin%2f1540037352%2f15mindvrm016ea7e7c38c274a0faaa010e85bf2a6eb18january2025%2fmaster_ap%2a~data=ip%3do8d78p8UoCfEfkGFt8FPU838Klt2k1J1k2WnUYIbWjSSdKcuXHm2rxh-userid%3dnejyTCekQfJ5A3doveZc737zpgRCNzMgXVVtZn5WSyrQ-did%3dulEfKf3cLZKgobgqSrLFaPZn5GK1WU9m8odjuympVFip-cc%3din-de%3d1-pl%3dweb-ap%3d24.12.13.3-ut%3dfree-fpassv2-ttl%3d1800-type%3dpaid-~hmac=50db8bded5c9025055818a209618bba7bf2b5cc0736776f64049d8357b0568bf&ttl=1800&type=paid&acl=/hls/live/2034625/inallow-ftb-2025/hin/1540037352/15mindvrm016ea7e7c38c274a0faaa010e85bf2a6eb18january2025/master_ap";
 
-        if (!manifestUri) {
-          console.error('No manifestUri provided!');
-          alert("Error: No video URL provided in the query string.");
-          return;
-        }
+        const urlParams = new URLSearchParams(window.location.search);
+        const manifestUri = urlParams.get('url') || defaultUrl;
+
+        console.log("Attempting to load URL:", manifestUri);
 
         const video = document.getElementById('video');
         const ui = video['ui'];
@@ -40,57 +51,36 @@
         const player = controls.getPlayer();
 
         const config = {
-          'controlPanelElements': ['play_pause', 'spacer', 'mute', 'quality', 'language','picture_in_picture', 'fullscreen']
+          controlPanelElements: ['play_pause', 'spacer', 'mute', 'quality', 'picture_in_picture', 'fullscreen'],
         };
 
         ui.configure(config);
 
-        window.player = player;
-        window.ui = ui;
+        player.configure({
+          streaming: {
+            useNativeHlsOnSafari: false,
+          },
+        });
 
-        player.addEventListener('error', onPlayerErrorEvent);
-        controls.addEventListener('error', onUIErrorEvent);
+        player.addEventListener('error', (errorEvent) => {
+          console.error("Player Error:", errorEvent.detail);
+          alert("An error occurred while playing the video. Check the console for details.");
+        });
 
         try {
           await player.load(manifestUri);
-          console.log('The video has now been loaded!');
+          console.log("The video has now been loaded!");
+          document.getElementById('live-label').style.display = 'block';
         } catch (error) {
-          onPlayerError(error);
+          console.error("Error loading video:", error);
+          alert("Failed to load the video. Please check the URL or CORS proxy.");
         }
       }
 
-      function onPlayerErrorEvent(errorEvent) {
-        onPlayerError(errorEvent.detail);
-      }
-
-      function onPlayerError(error) {
-        console.error('Error code', error.code, 'object', error);
-      }
-
-      function onUIErrorEvent(errorEvent) {
-        onPlayerError(errorEvent.detail);
-      }
-
-      function initFailed(errorEvent) {
-        console.error('Unable to load the UI library!');
-      }
-
       document.addEventListener('shaka-ui-loaded', init);
-      document.addEventListener('shaka-ui-load-failed', initFailed);
+      document.addEventListener('shaka-ui-load-failed', () => {
+        console.error("Shaka Player UI library failed to load.");
+      });
     </script>
-
-    <div style="margin-top: 5px;">
-      <center>
-            <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
-            <script type="text/javascript">sc_online_t(1703448, "Watching....", "#1d1d21");</script>
-            <br>
-            <noscript><a href="https://www.supercounters.com/"></a></noscript>
-        </center>
-    </div>
-    <div style="background-color: #0074d9; text-align: center; padding: 10px;">
-      <a href="https://t.me/+ESR7kTRkAHI1NTI1" target="_blank">
-        <button id="joinTelegramButton">Join Telegram</button>
-      </a>
-    </div>
   </body>
 </html>
