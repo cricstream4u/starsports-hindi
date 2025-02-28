@@ -1,33 +1,70 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG @cric_stream</title>
     <link rel="shortcut icon" type="image/x-icon" href="Cric stream Favicon.jpg">
-    <!-- Shaka Player UI compiled library -->
-    <script src="shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="controls.min.css">
+    <title>TG- @cric_stream</title>
+    <!-- HLS and DASH Player with Plyr -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <style>
-      #live-label {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-size: 10px;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.4);
-        padding: 4px 8px;
-        border-radius: 5px;
-        display: none;
-        z-index: 10;
-      }
+        body {
+            margin: 0;
+            padding: 5px;
+            font-family: Arial, sans-serif;
+        }
 
-      #live-label a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-      }
+        .video-container {
+            width: 100%;
+            background-color: white;
+        }
 
-       /* For screens larger than 768px (laptops, desktops) */
+        video {
+            width: 100%;
+            height: auto;
+        }
+
+        .content {
+            padding: 0;
+            background-color: white;
+        }
+
+        #joinTelegramButton {
+            background-color: #fff;
+            color: #0074d9;
+            border: 2px solid #0074d9;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        #joinTelegramButton:hover {
+            background-color: #0074d9;
+            color: #fff;
+        }
+
+        #live-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 4px 8px;
+            border-radius: 5px;
+            display: none;
+            z-index: 10;
+       }
+
+       #live-label a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+       }
+
+      /* For larger screens */
       @media (min-width: 768px) {
         #live-label {
           font-size: 8px;
@@ -35,140 +72,135 @@
         }
       }
 
-      /* For smaller screens (mobiles) */
+      /* For smaller screens */
       @media (max-width: 767px) {
         #live-label {
           font-size: 5px;
           padding: 2px 4px;
-          top: 5px;
-          left: 5px;
+          top: 7px;
+          left: 7px;
         }
       }
-
-       /* Popup styles */
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #1c1c1c;
-            border-radius: 20px; /* Rounded card style */
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
-            z-index: 1002;
-            width: 90%;
-            max-width: 400px;
-            animation: fadeIn 0.5s;
-        }
-
-        .popup h2 {
-            color: #ffcc00;
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
-        .popup p {
-            margin-bottom: 20px;
-            color: #ccc;
-            font-size: 16px;
-        }
-
-        .popup button {
-            background-color: #0088cc;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-
-        .popup button:hover {
-            background-color: #006699;
-        }
-
-        .popup .close-btn {
-            background-color: #555;
-        }
-
-        .popup .close-btn:hover {
-            background-color: #333;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+        
     </style>
-  </head>
-  <body>
-    <div data-shaka-player-container style="max-width:100%">
-      <video autoplay data-shaka-player id="video" style="width:100%;height:100%; background-color:black;" poster=""></video>
-      <div id="live-label">
-        <center><a href="https://t.me/cric_stream">CRIC <br> STREAM</a></center>
-      </div>
+</head>
+<body>
+    <div class="video-container">
+        <video preload="none" id="video" autoplay controls crossorigin poster="CRIC stream Thumbnail.jpg"></video>
+  
+        <div id="live-label">
+           <center><a href="https://t.me/+ESR7kTRkAHI1NTI1">CRIC <br> STREAM</a></center>
+        </div>
     </div>
 
-    <script>
-      async function init() {
-        const defaultUrl = "https://vkvsd210.okcdn.ru/hls/7750372428443.m3u8/sig/OYYluz5B-Hs/srcIp/176.227.240.63/urls/185.226.52.86/expires/1741126268128/clientType/14/srcAg/CHROME_ANDROID/fromCache/1/mid/8837047200667/id/7750372428443/video.m3u8";
-        const urlParams = new URLSearchParams(window.location.search);
-        const manifestUri = urlParams.get('url') || defaultUrl;
+    <div class="content">
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                let videoUrl = urlParams.get('video');
 
-        console.log("Attempting to load URL:", manifestUri);
+                // Set a default video URL if none is provided
+                if (!videoUrl) {
+                    videoUrl = "https://vkvsd210.okcdn.ru/hls/7750372428443.m3u8/sig/OYYluz5B-Hs/srcIp/176.227.240.63/urls/185.226.52.86/expires/1741126268128/clientType/14/srcAg/CHROME_ANDROID/fromCache/1/mid/8837047200667/id/7750372428443/video.m3u8"; // Replace with your default video URL
+                }
 
-        const video = document.getElementById('video');
-        const ui = video['ui'];
-        const controls = ui.getControls();
-        const player = controls.getPlayer();
+                const video = document.getElementById('video');
+                const defaultOptions = {
+                    controls: [
+                        'play-large',
+                        'play',
+                        'progress',
+                        'duration',
+                        'live',
+                        'mute',
+                        'settings',
+                        'pip',
+                        'airplay',
+                        'fullscreen',
+                    ],
+                    settings: ['quality'],
+                };
 
-        const config = {
-          controlPanelElements: ['play_pause', 'spacer', 'mute', 'quality', 'picture_in_picture', 'fullscreen'],
-        };
+                // Show "Live" label when the stream is live
+                document.getElementById('live-label').style.display = 'block';
 
-        ui.configure(config);
+                const errorMessageTimeout = setTimeout(() => {
+                    document.body.innerHTML = "<h2>There was an issue loading the stream. Please try again later.</h2>";
+                }, 120000);
 
-        player.configure({
-          streaming: {
-            useNativeHlsOnSafari: false,
-          },
-        });
+                if (videoUrl.endsWith('.m3u8')) {
+                    if (Hls.isSupported()) {
+                        const hls = new Hls();
+                        hls.loadSource(videoUrl);
+                        hls.attachMedia(video);
 
-        player.addEventListener('error', (errorEvent) => {
-          console.error("Player Error:", errorEvent.detail);
-          
-        });
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                            const availableQualities = hls.levels.map(level => level.height);
 
-        try {
-          await player.load(manifestUri);
-          console.log("The video has now been loaded!");
-          document.getElementById('live-label').style.display = 'block';
-        } catch (error) {
-          console.error("Error loading video:", error);
-          
-        }
-      }
+                            defaultOptions.quality = {
+                                default: 0,
+                                options: availableQualities,
+                                forced: true,
+                                onChange: (newQuality) => updateQuality(hls, newQuality),
+                            };
 
-      document.addEventListener('shaka-ui-loaded', init);
-      document.addEventListener('shaka-ui-load-failed', () => {
-        console.error("Shaka Player UI library failed to load.");
-      });
-    </script>
+                            new Plyr(video, defaultOptions);
+                            clearTimeout(errorMessageTimeout);
+                        });
 
-    
-    
-    <center>
-            <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
-            <script type="text/javascript">sc_online_t(1703448, "Watching....", "#1d1d21");</script>
-            <br>
-            <noscript><a href="https://www.supercounters.com/"></a></noscript>
+                        hls.on(Hls.Events.ERROR, (event, data) => {
+                            console.error('HLS.js Error:', data);
+                        });
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = videoUrl;
+                        new Plyr(video, defaultOptions);
+                        video.onplaying = () => clearTimeout(errorMessageTimeout);
+                    } else {
+                        document.body.innerHTML = "<h2>HLS not supported on your browser</h2>";
+                    }
+                } else if (videoUrl.endsWith('.mpd')) {
+                    const dash = dashjs.MediaPlayer().create();
+                    dash.initialize(video, videoUrl, true);
+
+                    dash.on(dashjs.MediaPlayer.events.MANIFEST_LOADED, () => {
+                        const availableQualities = dash.getBitrateInfoListFor('video').map(info => info.height);
+
+                        defaultOptions.quality = {
+                            default: 0,
+                            options: availableQualities,
+                            forced: true,
+                            onChange: (newQuality) => updateDashQuality(dash, newQuality),
+                        };
+
+                        new Plyr(video, defaultOptions);
+                        clearTimeout(errorMessageTimeout);
+                    });
+
+                    dash.on(dashjs.MediaPlayer.events.ERROR, (e) => {
+                        console.error('DASH.js Error:', e);
+                    });
+                } else {
+                    document.body.innerHTML = "<h2>Unsupported video format</h2>";
+                }
+            });
+
+            function updateQuality(hls, newQuality) {
+                hls.currentLevel = newQuality === 0 ? -1 : hls.levels.findIndex(level => level.height === newQuality);
+            }
+
+            function updateDashQuality(dash, newQuality) {
+                dash.setQualityFor('video', newQuality === 0 ? -1 : newQuality);
+            }
+        </script>
+
+        <center>
+            <!-- Online Users Counter -->
+            <center>
+                <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
+                <script type="text/javascript">sc_online_t(1707487,"Users Online","170ddb");</script>
+                <br>
+                <noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
+            </center>
         </center>
 
         <div style="background-color: #0074d9; text-align: center; padding: 10px;">
@@ -177,6 +209,5 @@
             </a>
         </div>
     </div>
-    
-  </body>
+</body>
 </html>
