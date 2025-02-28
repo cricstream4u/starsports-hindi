@@ -5,8 +5,8 @@
     <title>TG @cric_stream</title>
     <link rel="shortcut icon" type="image/x-icon" href="Cric stream Favicon.jpg">
     <!-- Shaka Player UI compiled library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.5/shaka-player.ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.12.5/controls.min.css">
+    <script src="shaka-player.ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="controls.min.css">
     <style>
       #live-label {
         position: absolute;
@@ -14,9 +14,9 @@
         left: 10px;
         font-size: 10px;
         color: white;
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.4);
         padding: 4px 8px;
-        border-radius: 10px;
+        border-radius: 5px;
         display: none;
         z-index: 10;
       }
@@ -26,6 +26,86 @@
         text-decoration: none;
         font-weight: bold;
       }
+
+       /* For screens larger than 768px (laptops, desktops) */
+      @media (min-width: 768px) {
+        #live-label {
+          font-size: 8px;
+          padding: 5px 10px;
+        }
+      }
+
+      /* For smaller screens (mobiles) */
+      @media (max-width: 767px) {
+        #live-label {
+          font-size: 5px;
+          padding: 2px 4px;
+          top: 5px;
+          left: 5px;
+        }
+      }
+
+       /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1c1c1c;
+            border-radius: 20px; /* Rounded card style */
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            z-index: 1002;
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 0.5s;
+        }
+
+        .popup h2 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .popup p {
+            margin-bottom: 20px;
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        .popup button {
+            background-color: #0088cc;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .popup button:hover {
+            background-color: #006699;
+        }
+
+        .popup .close-btn {
+            background-color: #555;
+        }
+
+        .popup .close-btn:hover {
+            background-color: #333;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
   </head>
   <body>
@@ -38,8 +118,7 @@
 
     <script>
       async function init() {
-        const defaultUrl = "https://live07.hotstar.com/hls/live/2034625/inallow-ftb-2025/hin/1540037352/15mindvrm016ea7e7c38c274a0faaa010e85bf2a6eb18january2025/master_ap.m3u8?a=ns&hdnea=exp=1737191500~acl=%2fhls%2flive%2f2034625%2finallow-ftb-2025%2fhin%2f1540037352%2f15mindvrm016ea7e7c38c274a0faaa010e85bf2a6eb18january2025%2fmaster_ap%2a~data=ip%3do8d78p8UoCfEfkGFt8FPU838Klt2k1J1k2WnUYIbWjSSdKcuXHm2rxh-userid%3dnejyTCekQfJ5A3doveZc737zpgRCNzMgXVVtZn5WSyrQ-did%3dulEfKf3cLZKgobgqSrLFaPZn5GK1WU9m8odjuympVFip-cc%3din-de%3d1-pl%3dweb-ap%3d24.12.13.3-ut%3dfree-fpassv2-ttl%3d1800-type%3dpaid-~hmac=50db8bded5c9025055818a209618bba7bf2b5cc0736776f64049d8357b0568bf&ttl=1800&type=paid&acl=/hls/live/2034625/inallow-ftb-2025/hin/1540037352/15mindvrm016ea7e7c38c274a0faaa010e85bf2a6eb18january2025/master_ap";
-
+        const defaultUrl = "https://jcevents.jiocinema.com/bpk-tv/JC_Sports18_1HD/JCHLS/hdntl=exp=1740731811~acl=%2f*~id=734d91efa9480a411197166084224a1d~data=hdntl~hmac=59c116cca1d5b4cb01a37d2c6243831af69b1275cc46d9cbc4f40a88f246857a/index.m3u8";
         const urlParams = new URLSearchParams(window.location.search);
         const manifestUri = urlParams.get('url') || defaultUrl;
 
@@ -64,7 +143,7 @@
 
         player.addEventListener('error', (errorEvent) => {
           console.error("Player Error:", errorEvent.detail);
-          alert("An error occurred while playing the video. Check the console for details.");
+          
         });
 
         try {
@@ -73,7 +152,7 @@
           document.getElementById('live-label').style.display = 'block';
         } catch (error) {
           console.error("Error loading video:", error);
-          alert("Failed to load the video. Please check the URL or CORS proxy.");
+          
         }
       }
 
@@ -82,5 +161,22 @@
         console.error("Shaka Player UI library failed to load.");
       });
     </script>
+
+    
+    
+    <center>
+            <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
+            <script type="text/javascript">sc_online_t(1703448, "Watching....", "#1d1d21");</script>
+            <br>
+            <noscript><a href="https://www.supercounters.com/"></a></noscript>
+        </center>
+
+        <div style="background-color: #0074d9; text-align: center; padding: 10px;">
+            <a href="https://t.me/cric_stream" target="_blank">
+                <button id="joinTelegramButton">Join Telegram</button>
+            </a>
+        </div>
+    </div>
+    
   </body>
 </html>
