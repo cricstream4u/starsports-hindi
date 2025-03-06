@@ -4,210 +4,182 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="Cric stream Favicon.jpg">
-    <title>TG- @cric_stream</title>
-    <!-- HLS and DASH Player with Plyr -->
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
-    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <title>TG-@cric_stream</title>
     <style>
         body {
             margin: 0;
-            padding: 5px;
+            padding-top: 5px;
             font-family: Arial, sans-serif;
-        }
-
-        .video-container {
             width: 100%;
-            background-color: white;
+            background-color: #121212;
+            color: white;
+            text-align: center;
         }
 
-        video {
+        #jwplayerDiv {
             width: 100%;
-            height: auto;
+            height: 100%;
         }
 
-        .content {
-            padding: 0;
-            background-color: white;
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1c1c1c;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            z-index: 1002;
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 0.5s;
         }
 
-        #joinTelegramButton {
-            background-color: #fff;
-            color: #0074d9;
-            border: 2px solid #0074d9;
-            padding: 0;
-            cursor: pointer;
+        .popup h2 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+            font-size: 20px;
         }
 
-        #joinTelegramButton:hover {
-            background-color: #0074d9;
+        .popup p {
+            margin-bottom: 20px;
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        .popup button {
+            background-color: #0088cc;
             color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-bottom: 10px;
         }
 
-        #live-label {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 10px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.4);
-            padding: 4px 8px;
-            border-radius: 5px;
-            display: none;
-            z-index: 10;
-       }
+        .popup button:hover {
+            background-color: #006699;
+        }
 
-       #live-label a {
-            color: white;
+        .popup .close-btn {
+            background-color: #555;
+        }
+
+        .popup .close-btn:hover {
+            background-color: #333;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Neon effect container */
+        .neon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            margin: 20px;
+            background-color: #2f2f2f;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00ff99;
+            animation: neonBorder 2s infinite alternate;
+        }
+
+        .neon-container h1 {
+            color: #fff;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .neon-container a {
+            color: #00ff99;
+            font-size: 1.5rem;
             text-decoration: none;
             font-weight: bold;
-       }
-
-      /* For larger screens */
-      @media (min-width: 768px) {
-        #live-label {
-          font-size: 8px;
-          padding: 5px 10px;
+            border: 2px solid #00ff99;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
         }
-      }
 
-      /* For smaller screens */
-      @media (max-width: 767px) {
-        #live-label {
-          font-size: 5px;
-          padding: 2px 4px;
-          top: 7px;
-          left: 7px;
+        .neon-container a:hover {
+            background-color: #00ff99;
+            color: #121212;
+            box-shadow: 0 0 20px #00ff99, 0 0 40px #00ff99;
         }
-      }
-        
+
+        @keyframes neonBorder {
+            0% { border-color: #00ff99; }
+            25% { border-color: #ff007f; }
+            50% { border-color: #007fff; }
+            75% { border-color: #ffbf00; }
+            100% { border-color: #00ff99; }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .neon-container h1 {
+                font-size: 1.8rem;
+            }
+
+            .neon-container a {
+                font-size: 1.2rem;
+                padding: 8px 16px;
+            }
+        }
     </style>
+    <script src="https://cdn.jwplayer.com/libraries/SAHhwvZq.js"></script>
 </head>
 <body>
-    <div class="video-container">
-        <video preload="none" id="video" autoplay controls crossorigin poster="CRIC stream Thumbnail.jpg"></video>
-  
-        <div id="live-label">
-           <center><a href="https://t.me/+ESR7kTRkAHI1NTI1">CRIC <br> STREAM</a></center>
-        </div>
-    </div>
+    <div id="jwplayerDiv"></div>
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
-    <div class="content">
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const urlParams = new URLSearchParams(window.location.search);
-                let videoUrl = urlParams.get('video');
+        // Default HLS Stream URL if 'file' parameter is not provided
+        const defaultStreamUrl = "https://cricstream4u.github.io/jwplyr/?file=https://vkvsd219.okcdn.ru/hls/8225580386958.m3u8/sig/241CF_C1nJE/expires/1741343482607/srcIp/92.62.121.36/urls/185.226.52.89/clientType/14/srcAg/CHROME_ANDROID/mid/10158732684174/8225580386958/video.m3u8?p"; // Replace with your actual default stream URL
+        const hlsStreamUrl = getQueryParam("file") || defaultStreamUrl;
 
-                // Set a default video URL if none is provided
-                if (!videoUrl) {
-                    videoUrl = "https://cricstream4u.github.io/jwplyr/?file=https://vkvsd219.okcdn.ru/hls/8225580386958.m3u8/sig/241CF_C1nJE/expires/1741343482607/srcIp/92.62.121.36/urls/185.226.52.89/clientType/14/srcAg/CHROME_ANDROID/mid/10158732684174/8225580386958/video.m3u8"; // Replace with your default video URL
-                }
+        const playerInstance = jwplayer("jwplayerDiv");
+        playerInstance.setup({
+            file: hlsStreamUrl,
+            width: "100%",
+            height: "100%",
+            aspectratio: "16:9",
+            autostart: true,
+            mute: false,
+            type: "hls",
+            preload: "auto",
+            cast: { appid: "CC1AD845" }
+        });
 
-                const video = document.getElementById('video');
-                const defaultOptions = {
-                    controls: [
-                        'play-large',
-                        'play',
-                        'progress',
-                        'duration',
-                        'live',
-                        'mute',
-                        'settings',
-                        'pip',
-                        'airplay',
-                        'fullscreen',
-                    ],
-                    settings: ['quality'],
-                };
+        playerInstance.on('error', function(error) {
+            console.error("Error loading stream:", error.message);
+        });
+    </script>
 
-                // Show "Live" label when the stream is live
-                document.getElementById('live-label').style.display = 'block';
+    <center>
+        <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
+        <script type="text/javascript">sc_online_t(1707487,"Users Online","170ddb");</script>
+        <br>
+        <noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
+    </center>
 
-                const errorMessageTimeout = setTimeout(() => {
-                    document.body.innerHTML = "<h2>There was an issue loading the stream. Please try again later.</h2>";
-                }, 120000);
-
-                if (videoUrl.endsWith('.m3u8')) {
-                    if (Hls.isSupported()) {
-                        const hls = new Hls();
-                        hls.loadSource(videoUrl);
-                        hls.attachMedia(video);
-
-                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                            const availableQualities = hls.levels.map(level => level.height);
-
-                            defaultOptions.quality = {
-                                default: 0,
-                                options: availableQualities,
-                                forced: true,
-                                onChange: (newQuality) => updateQuality(hls, newQuality),
-                            };
-
-                            new Plyr(video, defaultOptions);
-                            clearTimeout(errorMessageTimeout);
-                        });
-
-                        hls.on(Hls.Events.ERROR, (event, data) => {
-                            console.error('HLS.js Error:', data);
-                        });
-                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                        video.src = videoUrl;
-                        new Plyr(video, defaultOptions);
-                        video.onplaying = () => clearTimeout(errorMessageTimeout);
-                    } else {
-                        document.body.innerHTML = "<h2>HLS not supported on your browser</h2>";
-                    }
-                } else if (videoUrl.endsWith('.mpd')) {
-                    const dash = dashjs.MediaPlayer().create();
-                    dash.initialize(video, videoUrl, true);
-
-                    dash.on(dashjs.MediaPlayer.events.MANIFEST_LOADED, () => {
-                        const availableQualities = dash.getBitrateInfoListFor('video').map(info => info.height);
-
-                        defaultOptions.quality = {
-                            default: 0,
-                            options: availableQualities,
-                            forced: true,
-                            onChange: (newQuality) => updateDashQuality(dash, newQuality),
-                        };
-
-                        new Plyr(video, defaultOptions);
-                        clearTimeout(errorMessageTimeout);
-                    });
-
-                    dash.on(dashjs.MediaPlayer.events.ERROR, (e) => {
-                        console.error('DASH.js Error:', e);
-                    });
-                } else {
-                    document.body.innerHTML = "<h2>Unsupported video format</h2>";
-                }
-            });
-
-            function updateQuality(hls, newQuality) {
-                hls.currentLevel = newQuality === 0 ? -1 : hls.levels.findIndex(level => level.height === newQuality);
-            }
-
-            function updateDashQuality(dash, newQuality) {
-                dash.setQualityFor('video', newQuality === 0 ? -1 : newQuality);
-            }
-        </script>
-
-        <center>
-            <!-- Online Users Counter -->
-            <center>
-                <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
-                <script type="text/javascript">sc_online_t(1707487,"Users Online","170ddb");</script>
-                <br>
-                <noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
-            </center>
-        </center>
-
-        <div style="background-color: #0074d9; text-align: center; padding: 10px;">
-            <a href="https://t.me/cric_stream" target="_blank">
-                <button id="joinTelegramButton">Join Telegram</button>
-            </a>
-        </div>
+    <div style="background-color: #0074d9; text-align: center; padding: 10px;">
+        <a href="https://t.me/cric_stream" target="_blank">
+            <button id="joinTelegramButton">Join Telegram</button>
+        </a>
     </div>
 </body>
 </html>
