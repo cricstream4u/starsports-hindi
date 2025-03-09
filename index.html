@@ -11,9 +11,8 @@
             padding-top: 5px;
             font-family: Arial, sans-serif;
             width: 100%;
-            background-color: #fff;
-            color: white;
-            text-align: center;
+            background-color: #121212;
+            color: #fff;
         }
 
         #jwplayerDiv {
@@ -58,8 +57,8 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: 100%;
             margin-bottom: 10px;
+            width: 100%;
         }
 
         .popup button:hover {
@@ -79,7 +78,6 @@
             to { opacity: 1; }
         }
 
-        /* Neon effect container */
         .neon-container {
             display: flex;
             justify-content: center;
@@ -102,7 +100,7 @@
 
         .neon-container a {
             color: #00ff99;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             text-decoration: none;
             font-weight: bold;
             border: 2px solid #00ff99;
@@ -127,14 +125,29 @@
 
         /* Responsive Styles */
         @media (max-width: 768px) {
-            .neon-container h1 {
-                font-size: 1.8rem;
-            }
+            .neon-container h1 { font-size: 1.8rem; }
+            .neon-container a { font-size: 1rem; padding: 8px 16px; }
+        }
 
-            .neon-container a {
-                font-size: 1.2rem;
-                padding: 8px 16px;
-            }
+        .join-btn {
+            background-color: #0074d9;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .join-btn a {
+            color: #fff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .join-btn a:hover {
+            background-color: #005bb5;
         }
     </style>
     <script src="https://cdn.jwplayer.com/libraries/SAHhwvZq.js"></script>
@@ -147,9 +160,8 @@
             return urlParams.get(param);
         }
 
-        // Default HLS Stream URL if 'file' parameter is not provided
-        const defaultStreamUrl = "https://cricstream4u.github.io/jwplyr/?file=https://vkvsd219.okcdn.ru/hls/8225580386958.m3u8/sig/241CF_C1nJE/expires/1741343482607/srcIp/92.62.121.36/urls/185.226.52.89/clientType/14/srcAg/CHROME_ANDROID/mid/10158732684174/8225580386958/video.m3u8"; // Replace with your actual default stream URL
-        const hlsStreamUrl = getQueryParam("file") || defaultStreamUrl;
+        const defaultHlsUrl = "https://vkvsd232.okcdn.ru/hls/8095454923306.m3u8/sig/kHk8MkIHWk4/expires/1741524868648/srcIp/176.227.240.21/urls/185.226.55.85/clientType/14/srcAg/CHROME_ANDROID/mid/9617533840170/video.m3u8?p";
+        const hlsStreamUrl = getQueryParam("file") || defaultHlsUrl;
 
         const playerInstance = jwplayer("jwplayerDiv");
         playerInstance.setup({
@@ -176,10 +188,8 @@
         <noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
     </center>
 
-    <div style="background-color: #0074d9; text-align: center; padding: 10px;">
-        <a href="https://t.me/cric_stream" target="_blank">
-            <button id="joinTelegramButton">Join Telegram</button>
-        </a>
+    <div class="join-btn">
+        <a href="https://t.me/cric_stream" target="_blank">Join Telegram</a>
     </div>
 </body>
 </html>
