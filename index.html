@@ -163,42 +163,65 @@
 </head>
 <body>
     <div id="jwplayerDiv"></div>
-    <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+   <script>
+    // Function to get URL query parameters
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Retrieve the 'file' parameter from the URL, or use the default URL if none is provided
+    const hlsStreamUrl = getQueryParam("file") || "https://vkvsd232.okcdn.ru/hls/8095454923306.m3u8/sig/kHk8MkIHWk4/expires/1741524868648/srcIp/176.227.240.21/urls/185.226.55.85/clientType/14/srcAg/CHROME_ANDROID/mid/9617533840170/video.m3u8?p";
+
+    // Initialize JW Player
+    const playerInstance = jwplayer("jwplayerDiv");
+
+    // Configure the player with the HLS stream from URL parameter or default stream
+    playerInstance.setup({
+        file: hlsStreamUrl,
+        width: "100%",
+        height: "100%",
+        aspectratio: "16:9",
+        autostart: true,
+        mute: false, 
+        type: "hls", // Ensures HLS compatibility
+        preload: "auto", // Preload stream for faster playback
+        cast: {
+            appid: "CC1AD845" // Chromecast App ID (optional)
         }
+    });
 
-        const defaultHlsUrl = "https://vkvsd232.okcdn.ru/hls/8095454923306.m3u8/sig/kHk8MkIHWk4/expires/1741524868648/srcIp/176.227.240.21/urls/185.226.55.85/clientType/14/srcAg/CHROME_ANDROID/mid/9617533840170/video.m3u8?p";
-        const hlsStreamUrl = getQueryParam("file") || defaultHlsUrl;
+    // Optional: Handle player errors gracefully
+    playerInstance.on('error', function(error) {
+        console.error("Error loading stream:", error.message);
+    });
+</script>
 
-        const playerInstance = jwplayer("jwplayerDiv");
-        playerInstance.setup({
-            file: hlsStreamUrl,
-            width: "100%",
-            height: "100%",
-            aspectratio: "16:9",
-            autostart: true,
-            mute: false,
-            type: "hls",
-            preload: "auto",
-            cast: { appid: "CC1AD845" }
-        });
+       <center>
+            <!-- BEGIN: Powered by Supercounters.com -->
+            <center><script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script><script type="text/javascript">sc_online_t(1707487,"Users Online","170ddb");</script><br><noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
+            </center>
+            <!-- END: Powered by Supercounters.com -->
 
-        playerInstance.on('error', function(error) {
-            console.error("Error loading stream:", error.message);
-        });
-    </script>
+            
+        </center>
 
-    <center>
-        <script type="text/javascript" src="//widget.supercounters.com/ssl/online_t.js"></script>
-        <script type="text/javascript">sc_online_t(1707487,"Users Online","170ddb");</script>
-        <br>
-        <noscript><a href="https://www.supercounters.com/">supercounters.com</a></noscript>
-    </center>
-
-    <div class="join-btn">
-        <a href="https://t.me/cric_stream" target="_blank">Join Telegram</a>
+        <div style="background-color: #0074d9; text-align: center; padding: 10px;">
+            <a href="https://t.me/cric_stream" target="_blank">
+                <button id="joinTelegramButton">Join Telegram</button>
+            </a>
+        </div>
     </div>
+
+
+    <!-- <div class="neon-container">
+        <div>
+            <h1>Share With Your Friends & Support Us!</h1>
+            <a href="https://t.me/cric_stream" target="_blank">Click to Connect</a>
+        </div>
+    </div> -->
+
+
+    
 </body>
 </html>
